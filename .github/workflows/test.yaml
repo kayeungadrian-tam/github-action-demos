@@ -47,7 +47,7 @@ jobs:
           # See also: https://api.slack.com/methods/chat.postMessage#channels
           channel-id: ${{ secrets.CHANNEL_ID }}
           # For posting a rich message using Block Kit
-          payload: $PAYLOAD
+          payload: ${{fromJson(steps.set_var.outputs.slackJson).payload}}
+
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          PAYLOAD: ${{fromJson(steps.set_var.outputs.slackJson).payload}}
