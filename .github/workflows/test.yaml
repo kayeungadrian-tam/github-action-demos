@@ -60,6 +60,33 @@ jobs:
                   }
                 },
                 {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Commit :twisted_rightwards_arrows:",
+                        "emoji": true
+                      },
+                      "value": "commit",
+                      "url": "{{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+                      "action_id": "github-commit"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Action :link:",
+                        "emoji": true
+                      },
+                      "value": "action",
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                      "action_id": "github-action"
+                    }
+                  ]
+                },
+                {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
