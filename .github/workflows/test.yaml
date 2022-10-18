@@ -18,7 +18,7 @@ jobs:
 
       - id: set_var
         run: |
-          content=`cat ${PWD}/.github/templates/slack.json`
+          content=`cat .github/templates/slack.json`
           # the following lines are only required for multi line json
           content="${content//'%'/'%25'}"
           content="${content//$'\n'/'%0A'}"
