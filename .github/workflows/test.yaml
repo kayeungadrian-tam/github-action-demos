@@ -16,6 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - id: set_var
+        run: |
+          content=`cat ${PWD}/.github/templates/slack.json`
+          # the following lines are only required for multi line json
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          # end of optional handling for multi line json
+          echo "::set-output name=slackJson::$content"
+
       - name: Post to a Slack channel (In-line)
         id: slack-in-line
         uses: slackapi/slack-github-action@v1.23.0
@@ -38,17 +48,6 @@ jobs:
           channel-id: ${{ secrets.CHANNEL_ID }}
           # For posting a rich message using Block Kit
           payload: |
-            {
-              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-                  }
-                }
-              ]
-            }
+            ${{fromJson(steps.set_var.outputs.slackJson)}}
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
