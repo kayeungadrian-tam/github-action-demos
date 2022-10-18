@@ -54,7 +54,7 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "Sam deploy status:  :tada: :white_check_mark: :warning:",
+                    "text": "Deploy: :x: :tada: :white_check_mark: :warning:",
                     "emoji": true
                   }
                 },
