@@ -16,15 +16,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - id: set_var
+      - name: Extract branch name
         run: |
-          content=`cat .github/templates/slack.json`
-          # the following lines are only required for multi line json
-          content="${content//'%'/'%25'}"
-          content="${content//$'\n'/'%0A'}"
-          content="${content//$'\r'/'%0D'}"
-          # end of optional handling for multi line json
-          echo "::set-output name=slackJson::$content"
+          echo "::set-output name=BRANCH_NAME::${GITHUB_REF#refs/heads/}"
+        shell: bash
+
+      - name: Set COMMIT_MESSAGE
+        run: |
+          echo ::set-output name=COMMIT_MESSAGE::$(echo "${{ github.event.head_commit.message }}" | tr '\n' ' ')
+        shell: bash
 
       - name: Post to a Slack channel (In-line)
         id: slack-in-line
@@ -47,7 +47,35 @@ jobs:
           # See also: https://api.slack.com/methods/chat.postMessage#channels
           channel-id: ${{ secrets.CHANNEL_ID }}
           # For posting a rich message using Block Kit
-          payload: ${{fromJson(steps.set_var.outputs.slackJson).payload}}
-
+          payload: |
+            {
+              "text": ":sparkles: ビルド結果: ${{ job.status }}\n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Sam deploy status:  :tada: :white_check_mark: :warning:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":sparkles: ビルド結果: ${{ job.status }}\n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "Author: <https://github.com/${{ github.event.sender.login }}|@${{ github.event.sender.login }}>"
+                    }
+                  ]
+                }
+              ]
+            }
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
