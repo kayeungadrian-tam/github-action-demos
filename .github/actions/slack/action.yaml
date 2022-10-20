@@ -2,11 +2,15 @@ name: "slack-notify"
 description: send notification via SlackAPI
 
 inputs:
-  color:
+  COLOR:
     description: Color
+    default: FFFFFF
+    required: true
+  STYLE:
+    description: Style
     default: primary # primary, danger
     required: true
-  status:
+  STATUS:
     description: Deployment Status
     default: x # x = failed, tada = successful, warning = warning
     required: true
@@ -23,48 +27,46 @@ runs:
         channel-id: ${{ inputs.CHANNEL_ID }}
         payload: |
           {
-            "blocks": [
+            "attachments": [
               {
-                "type": "header",
-                "text": {
-                  "type": "plain_text",
-                  "text": "Sam deploy status: :${{inputs.status}}:",
-                  "emoji": true
-                }
-              },
-              {
-                "type": "section",
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "This is a mrkdwn section block :ghost: *this is bold*, and ~this is crossed out~, and <https://google.com|this is a link>"
-                }
-              },
-              {
-                "type": "actions",
-                "elements": [
+                "color": "#${{inputs.COLOR}}",
+                "blocks": [
                   {
-                    "type": "button",
-                    "style": "${{inputs.color}}",
+                    "type": "header",
                     "text": {
                       "type": "plain_text",
-                      "text": "Commit :twisted_rightwards_arrows:",
+                      "text": "Sam deploy status: :${{inputs.STATUS}}:",
                       "emoji": true
-                    },
-                    "value": "commit",
-                    "action_id": "github-commit",
-                    "url": "${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                    }
                   },
                   {
-                    "type": "button",
-                    "style": "${{inputs.color}}",
-                    "text": {
-                      "type": "plain_text",
-                      "text": "Action :link:",
-                      "emoji": true
-                    },
-                    "value": "action",
-                    "action_id": "github-action",
-                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "style": "${{inputs.STYLE}}",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "Commit :twisted_rightwards_arrows:",
+                          "emoji": true
+                        },
+                        "value": "commit",
+                        "action_id": "github-commit",
+                        "url": "${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                      },
+                      {
+                        "type": "button",
+                        "style": "${{inputs.STYLE}}",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "Action :link:",
+                          "emoji": true
+                        },
+                        "value": "action",
+                        "action_id": "github-action",
+                        "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      }
+                    ]
                   }
                 ]
               }

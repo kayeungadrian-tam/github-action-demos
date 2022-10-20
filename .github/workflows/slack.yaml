@@ -26,5 +26,5 @@ jobs:
         with:
           SLACK_BOT_TOKEN: ${{secrets.SLACK_BOT_TOKEN}}
           CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
-          color: primary
+          color: 00FF00
           status: tada
