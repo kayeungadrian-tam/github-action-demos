@@ -29,3 +29,21 @@ jobs:
           COLOR: 0000FF
           STATUS: x
           STYLE: danger
+
+  send-line:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8.6"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Send line
+        run: |
+          python src/line.py ${{secrets.LINE_NOTIFY_TOKEN}}

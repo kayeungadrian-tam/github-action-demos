@@ -6,6 +6,8 @@ A repo for different kinds of github actions interactions.
 
 [Link](https://github.com/slackapi/slack-github-action)
 
+https://zenn.dev/kinjosan/articles/bd82e07aa69080
+
 ## Line
 
 1. Login at [https://notify-bot.line.me/ja/](https://notify-bot.line.me/ja/)
