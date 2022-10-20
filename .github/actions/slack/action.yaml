@@ -1,0 +1,69 @@
+name: "slack-notify"
+description: send notification via SlackAPI
+runs:
+  using: "composite"
+  steps:
+    # - run: |
+    #     sam deploy --no-confirm-changeset \
+    #         --no-fail-on-empty-changeset \
+    #         --stack-name deploy-resources-${GITHUB_REF#refs/heads/} \
+    #         --s3-bucket dashboard-deploy-bucket-${GITHUB_REF#refs/heads/} \
+    #         --parameter-overrides EnvName=${GITHUB_REF#refs/heads/}
+    #   shell: bash
+
+    - name: Post to a Slack channel
+      id: slack-json
+      uses: slackapi/slack-github-action@v1.23.0
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      with:
+        channel-id: ${{ secrets.CHANNEL_ID }}
+        payload: |
+          {
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "Sam deploy status: :x: :tada: :white_check_mark: :warning:",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "This is a mrkdwn section block :ghost: *this is bold*, and ~this is crossed out~, and <https://google.com|this is a link>"
+                }
+              },
+              {
+                "type": "actions",
+                "elements": [
+                  {
+                    "type": "button",
+                    "style": "danger",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "Commit :twisted_rightwards_arrows:",
+                      "emoji": true
+                    },
+                    "value": "commit",
+                    "action_id": "github-commit",
+                    "url": "${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  },
+                  {
+                    "type": "button",
+                    "style": "primary",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "Action :link:",
+                      "emoji": true
+                    },
+                    "value": "action",
+                    "action_id": "github-action",
+                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  }
+                ]
+              }
+            ]
+          }
