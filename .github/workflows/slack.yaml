@@ -1,4 +1,4 @@
-name: test-slacks
+name: slack-notify
 
 on:
   push:
@@ -26,14 +26,13 @@ jobs:
           echo ::set-output name=COMMIT_MESSAGE::$(echo "${{ github.event.head_commit.message }}" | tr '\n' ' ')
         shell: bash
 
-      - name: Post to a Slack channel (JSON)
+      - name: Post to a Slack channel
         id: slack-json
         uses: slackapi/slack-github-action@v1.23.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         with:
-          # Slack channel id, channel name, or user id to post message.
-          # See also: https://api.slack.com/methods/chat.postMessage#channels
           channel-id: ${{ secrets.CHANNEL_ID }}
-          # For posting a rich message using Block Kit
           payload: |
             {
               "blocks": [
@@ -83,5 +82,3 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
