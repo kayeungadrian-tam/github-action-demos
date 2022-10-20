@@ -31,7 +31,14 @@ jobs:
           STYLE: danger
 
   send-line:
+    if: ${{ always()}}
+    needs: send-slack
+
     runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
     steps:
       - uses: actions/checkout@v2
 
