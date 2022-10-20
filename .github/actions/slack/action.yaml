@@ -1,16 +1,19 @@
 name: "slack-notify"
 description: send notification via SlackAPI
+
+inputs:
+  color:
+    description: Color
+    default: primary # primary, danger
+    required: true
+  status:
+    description: Deployment Status
+    default: x # x = failed, tada = successful, warning = warning
+    required: true
+
 runs:
   using: "composite"
   steps:
-    # - run: |
-    #     sam deploy --no-confirm-changeset \
-    #         --no-fail-on-empty-changeset \
-    #         --stack-name deploy-resources-${GITHUB_REF#refs/heads/} \
-    #         --s3-bucket dashboard-deploy-bucket-${GITHUB_REF#refs/heads/} \
-    #         --parameter-overrides EnvName=${GITHUB_REF#refs/heads/}
-    #   shell: bash
-
     - name: Post to a Slack channel
       id: slack-json
       uses: slackapi/slack-github-action@v1.23.0
@@ -25,7 +28,7 @@ runs:
                 "type": "header",
                 "text": {
                   "type": "plain_text",
-                  "text": "Sam deploy status: :x: :tada: :white_check_mark: :warning:",
+                  "text": "Sam deploy status: :${{inputs.status}}:",
                   "emoji": true
                 }
               },
@@ -41,7 +44,7 @@ runs:
                 "elements": [
                   {
                     "type": "button",
-                    "style": "danger",
+                    "style": "${{inputs.color}}",
                     "text": {
                       "type": "plain_text",
                       "text": "Commit :twisted_rightwards_arrows:",
@@ -53,7 +56,7 @@ runs:
                   },
                   {
                     "type": "button",
-                    "style": "primary",
+                    "style": "${{inputs.color}}",
                     "text": {
                       "type": "plain_text",
                       "text": "Action :link:",
