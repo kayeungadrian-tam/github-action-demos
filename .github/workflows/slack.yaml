@@ -25,4 +25,4 @@ jobs:
         uses: ./.github/actions/slack
         with:
           SLACK_BOT_TOKEN: ${{secrets.SLACK_BOT_TOKEN}}
-          channel-id: ${{ secrets.CHANNEL_ID }}
+          CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
