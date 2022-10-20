@@ -15,9 +15,9 @@ runs:
       id: slack-json
       uses: slackapi/slack-github-action@v1.23.0
       env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        SLACK_BOT_TOKEN: ${{ inputs.SLACK_BOT_TOKEN }}
       with:
-        channel-id: ${{ secrets.CHANNEL_ID }}
+        channel-id: ${{ inputs.CHANNEL_ID }}
         payload: |
           {
             "blocks": [
