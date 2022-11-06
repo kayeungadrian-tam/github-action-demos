@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
 
-from .routes import router
-from .data import CLASS
+from .backend.routes import router
+from .backend.data import CLASS
 
 app = FastAPI()
 
