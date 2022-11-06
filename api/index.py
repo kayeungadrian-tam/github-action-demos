@@ -6,4 +6,4 @@ app = Flask(__name__)
 
 @app.route("/")
 def root():
-    return "<p>Hello, World! Testing</p>"
+    return "<p>Hello, World! Inside API</p>"

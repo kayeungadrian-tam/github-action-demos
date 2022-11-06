@@ -1,0 +1,1 @@
+CLASS = "CLASS of 2018"
