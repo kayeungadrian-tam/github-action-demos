@@ -4,7 +4,7 @@ from data import CLASS
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/", tags=["Root"])
 def read_root():
     return {"message": "Server is up and running!"}
 
