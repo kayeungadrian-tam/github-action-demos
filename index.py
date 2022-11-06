@@ -1,8 +1,14 @@
-from flask import Flask
+from fastapi import FastAPI
+from data import CLASS
 
-app = Flask(__name__)
+app = FastAPI()
 
 
-@app.route("/")
-def root():
-    return "<p>Hello, World! Testing</p>"
+@app.get("/")
+def read_root():
+    return {"message": "Server is up and running!"}
+
+
+@app.get("/users")
+def post_message(name: str):
+    return {"message": f"Hello {name} from {CLASS}"}
