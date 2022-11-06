@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from data import CLASS
+from backend.data import CLASS
 
 app = FastAPI()
 
